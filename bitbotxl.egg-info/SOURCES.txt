@@ -1,0 +1,7 @@
+README.md
+setup.py
+bitbotxl.egg-info/PKG-INFO
+bitbotxl.egg-info/SOURCES.txt
+bitbotxl.egg-info/dependency_links.txt
+bitbotxl.egg-info/requires.txt
+bitbotxl.egg-info/top_level.txt
