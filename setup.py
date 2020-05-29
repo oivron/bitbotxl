@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="bitbotxl",
-    version="0.0.1",
+    version="0.0.2",
     author="Øivind Rønning, Statped",
     author_email="oiron@statped.no",
     license = "GNU GENERAL PUBLIC LICENSE",

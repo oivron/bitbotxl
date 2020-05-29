@@ -2,8 +2,10 @@
 Author: Øivind Rønning, Statped
 Github: https://github.com/oivron/bitbotxl
 """
+
 from microbit import *
 from utime import ticks_us, sleep_us
+
 
 class __Bitbot:
     """Holder of the left and right motors"""
@@ -72,14 +74,14 @@ class __Bitbot:
         """Read ultrasonic distance sensor.
         Returns distance to nearest object in cm."""
 
-        SONAR.write_digital(1)  # Send 10us Ping pulse
+        pin15.write_digital(1)  # Send 10us Ping pulse
         sleep_us(10)
-        SONAR.write_digital(0)
-        SONAR.set_pull(SONAR.NO_PULL)
-        while SONAR.read_digital() == 0:  # ensure Ping pulse has cleared
+        pin15.write_digital(0)
+        pin15.set_pull(pin15.NO_PULL)
+        while pin15.read_digital() == 0:  # ensure Ping pulse has cleared
             pass
             start_time = ticks_us()  # define starting time
-        while SONAR.read_digital() == 1:  # wait for Echo pulse to return
+        while pin15.read_digital() == 1:  # wait for Echo pulse to return
             pass
             end_time = ticks_us()  # define ending time
         elapsed = end_time - start_time
@@ -102,7 +104,7 @@ class __Bitbot:
         mask = 1 << bit
         value = 0
         try:
-            value = i2c.read(I2CADDR, 1)[0]
+            value = i2c.read(__I2CADDR, 1)[0]
         except OSError:
             pass
         if (value & mask) > 0:
@@ -111,10 +113,10 @@ class __Bitbot:
             return 0
 
     def __drive(self, direction, speed):
-        """Starting robot with given directon and speed. """
+        """Starting robot with given directon and speed."""
 
         # Recalculates from percent to absolute (0 - 1023)
-        speed = speed * SPEED_RATIO
+        speed = speed * __SPEED_RATIO
 
         if direction == FORWARD:
             pin8.write_digital(0)
@@ -126,21 +128,20 @@ class __Bitbot:
             pin8.write_digital(1)
             pin12.write_digital(1)
             # Corrects speed for bias and reverse
-            pin16.write_analog((speed * self.__LEFT_BIAS) * REVERSE_RATIO)
-            pin14.write_analog((speed * self.__RIGHT_BIAS) * REVERSE_RATIO)
+            pin16.write_analog((speed * self.__LEFT_BIAS) * __REVERSE_RATIO)
+            pin14.write_analog((speed * self.__RIGHT_BIAS) * __REVERSE_RATIO)
         elif direction == LEFT:
             pin8.write_digital(1)
             pin12.write_digital(0)
             # Corrects speed for bias and reverse
-            pin16.write_analog((speed * self.__LEFT_BIAS) * REVERSE_RATIO)
+            pin16.write_analog((speed * self.__LEFT_BIAS) * __REVERSE_RATIO)
             pin14.write_analog(speed * self.__RIGHT_BIAS)
         elif direction == RIGHT:
             pin8.write_digital(0)
             pin12.write_digital(1)
             # Corrects speed for bias and reverse
             pin16.write_analog(speed * self.__LEFT_BIAS)
-            pin14.write_analog((speed * self.__RIGHT_BIAS) * REVERSE_RATIO)
-
+            pin14.write_analog((speed * self.__RIGHT_BIAS) * __REVERSE_RATIO)
 
 
 class __Motor:
@@ -159,9 +160,8 @@ RIGHT = "right"
 LEFT = "left"
 
 # Initializing
-REVERSE_RATIO = 0.7
-SPEED_RATIO = 10.23  # Converts from % to pin speed
-I2CADDR = 0x1c  # address of PCA9557
-SONAR = pin15  # Ultrasonic: pin 15 (Bit:bot XL)
+__REVERSE_RATIO = 0.7 # Very simple correction of reverse speed
+__SPEED_RATIO = 10.23  # Converts from % to pin speed
+__I2CADDR = 0x1c  # address of PCA9557
 
 bitbot = __Bitbot()
