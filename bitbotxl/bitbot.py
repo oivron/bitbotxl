@@ -74,18 +74,18 @@ class __Bitbot:
         """Read ultrasonic distance sensor.
         Returns distance to nearest object in cm."""
 
-        pin15.write_digital(1)  # Send 10us Ping pulse
+        pin15.write_digital(1)
         sleep_us(10)
         pin15.write_digital(0)
         pin15.set_pull(pin15.NO_PULL)
-        while pin15.read_digital() == 0:  # ensure Ping pulse has cleared
+        while pin15.read_digital() == 0:
             pass
-            start_time = ticks_us()  # define starting time
-        while pin15.read_digital() == 1:  # wait for Echo pulse to return
+            start_time = ticks_us()
+        while pin15.read_digital() == 1:
             pass
-            end_time = ticks_us()  # define ending time
+            end_time = ticks_us()
         elapsed = end_time - start_time
-        distance = int(0.01715 * elapsed)  # Calculate cm distance
+        distance = int(0.01715 * elapsed)
         return distance
 
     # This method needs an additional parameter (Brake el. Coast)
